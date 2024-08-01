@@ -1,0 +1,15 @@
+{
+  "name": "mikwabot",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp yang terintegrasi dengan MikroTik",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "whatsapp-web.js": "^1.14.1",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
+
