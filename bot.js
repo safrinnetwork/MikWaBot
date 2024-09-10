@@ -17,12 +17,12 @@ let mikrotikConfig = {
     password: ''
 };
 
-// Create a global HTTPS agent to ignore SSL certificate errors
+// Pongola SSL
 const httpsAgent = new https.Agent({
-    rejectUnauthorized: false // Skip SSL certificate verification for all requests
+    rejectUnauthorized: false // Nde pongola ini ssl
 });
 
-// Helper function to handle axios requests
+// depe anu ini lo axios
 async function mikrotikRequest(endpoint, method = 'get', data = null) {
     try {
         const response = await axios({
@@ -42,12 +42,12 @@ async function mikrotikRequest(endpoint, method = 'get', data = null) {
     }
 }
 
-// Helper function to format uptime
+// ini kita ada beken ba ini format akan dpe waktu
 function formatUptime(uptime) {
     return uptime.replace(/(\d+)([hms])/g, '$1 $2');
 }
 
-// Helper function to convert bytes to MiB or GiB
+// ini kita ada beken ba ini format akan dpe GiB
 function toMiB(bytes) {
     return (bytes / 1024 / 1024).toFixed(1);
 }
@@ -56,22 +56,22 @@ function toGiB(bytes) {
     return (bytes / 1024 / 1024 / 1024).toFixed(1);
 }
 
-// Display QR code for authentication
+// ba kase lia barcode ini aba
 client.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
 });
 
-// Bot successfully authenticated
+// kalo macam ta konek mo muncul tulisan ini 
 client.on('ready', () => {
-    console.log('WhatsApp Bot is ready!');
+    console.log('MikWaBot Ready !');
 });
 
-// Message handler
+// pesan
 client.on('message', async msg => {
     const chatId = msg.from;
     const text = msg.body.toLowerCase();
 
-    // Menu and help message
+    // depe menu ini olobu
     if (text === 'menu' || text === '/help') {
         const helpMessage = `Selamat Datang di Mostech Bot\n\n` +
             `Berikut adalah menu yang tersedia:\n` +
@@ -88,11 +88,11 @@ client.on('message', async msg => {
         client.sendMessage(chatId, helpMessage);
     }
 
-    // MikroTik connection setup
+    // mo ba kase konek akan ini
     if (text.startsWith('/connect ')) {
         const [, url, username, password] = text.split(' ');
 
-        // Save credentials in memory
+
         mikrotikConfig.baseURL = url;
         mikrotikConfig.username = username;
         mikrotikConfig.password = password;
@@ -101,7 +101,7 @@ client.on('message', async msg => {
         client.sendMessage(chatId, 'Koneksi MikroTik berhasil disimpan. Gunakan perintah lain untuk interaksi dengan MikroTik.');
     }
 
-    // Check connection status
+
     if (text === '/status') {
         const statusMessage = mikrotikConfig.connected
             ? 'MikroTik terhubung.'
@@ -109,7 +109,7 @@ client.on('message', async msg => {
         client.sendMessage(chatId, statusMessage);
     }
 
-    // Fetch MikroTik system resource
+
     if (text === '/resource') {
         if (!mikrotikConfig.connected) {
             client.sendMessage(chatId, 'MikroTik belum terhubung. Gunakan /connect untuk terhubung.');
@@ -122,10 +122,10 @@ client.on('message', async msg => {
                     username: mikrotikConfig.username,
                     password: mikrotikConfig.password
                 },
-                httpsAgent: httpsAgent // Use global HTTPS agent
+                httpsAgent: httpsAgent 
             });
 
-            const resourceData = response.data; // Directly accessing the object
+            const resourceData = response.data; 
             const resourceMessage = `System Resource:\n` +
                 `Board Name: ${resourceData['board-name']}\n` +
                 `Uptime: ${formatUptime(resourceData.uptime)}\n` +
@@ -156,7 +156,7 @@ client.on('message', async msg => {
         }
     }
 
-    // Disable interface
+
     if (text.startsWith('/interface_disable ')) {
         const interfaceName = text.split(' ')[1];
         const result = await mikrotikRequest(`/interface/${interfaceName}`, 'patch', { disabled: "true" });
@@ -168,7 +168,7 @@ client.on('message', async msg => {
         }
     }
 
-    // Enable interface
+
     if (text.startsWith('/interface_enable ')) {
         const interfaceName = text.split(' ')[1];
         const result = await mikrotikRequest(`/interface/${interfaceName}`, 'patch', { disabled: "false" });
@@ -180,7 +180,7 @@ client.on('message', async msg => {
         }
     }
 
-    // Total Hotspot
+
     if (text === '/total_hotspot') {
         const users = await mikrotikRequest('/ip/hotspot/user');
         const activeUsers = await mikrotikRequest('/ip/hotspot/active');
@@ -197,23 +197,23 @@ client.on('message', async msg => {
         }
     }
 
-// Hotspot find by name
+
 if (text.startsWith('/hotspot_find ')) {
     const name = text.split(' ')[1].toLowerCase();
     
-    // Fetch all hotspot users and active users
+
     const users = await mikrotikRequest('/ip/hotspot/user');
     const activeUsers = await mikrotikRequest('/ip/hotspot/active');
     
     if (users && activeUsers) {
-        // Filter users based on name relevance
+
         const matchingUsers = users.filter(user => user.name.toLowerCase().includes(name));
         const matchingActiveUsers = activeUsers.filter(activeUser => activeUser.user.toLowerCase().includes(name));
         
         if (matchingUsers.length > 0) {
             let message = '';
 
-            // Display matching hotspot users
+
             matchingUsers.forEach((user, index) => {
                 message += `Hotspot User Detail ${index + 1}:\n` +
                     `Nama: ${user.name}\n` +
@@ -221,7 +221,7 @@ if (text.startsWith('/hotspot_find ')) {
                     `Profile: ${user.profile}\n\n`;
             });
 
-            // Display matching active users
+
             if (matchingActiveUsers.length > 0) {
                 matchingActiveUsers.forEach((activeUser, index) => {
                     message += `Hotspot Aktif Detail ${index + 1}:\n` +
@@ -244,7 +244,7 @@ if (text.startsWith('/hotspot_find ')) {
 }
 
 
-    // Total PPPoE Aktif
+
     if (text === '/total_pppoe') {
         const pppoe = await mikrotikRequest('/interface/pppoe-server/active');
 
@@ -256,7 +256,7 @@ if (text.startsWith('/hotspot_find ')) {
         }
     }
 
-    // Netwatch Down
+
     if (text === '/netwatch_down') {
         const netwatch = await mikrotikRequest('/tool/netwatch');
         if (netwatch) {
@@ -271,5 +271,5 @@ if (text.startsWith('/hotspot_find ')) {
     }
 });
 
-// Start the client
+
 client.initialize();
