@@ -1,6 +1,6 @@
-# MikroTik WhatsApp Bot
+# MikWaBot - MikroTik WhatsApp Bot
 
-MikroTik WhatsApp Bot adalah bot WhatsApp yang terhubung dengan perangkat MikroTik menggunakan REST API. Bot ini memungkinkan pengguna untuk mengontrol dan memantau berbagai fungsi MikroTik melalui pesan WhatsApp. Bot ini dibangun menggunakan `whatsapp-web.js`, `axios`, dan terhubung ke API REST MikroTik untuk mengambil dan mengirim data ke router MikroTik.
+MikWaBot - MikroTik WhatsApp Bot adalah bot WhatsApp yang terhubung dengan perangkat MikroTik menggunakan REST API. Bot ini memungkinkan pengguna untuk mengontrol dan memantau berbagai fungsi MikroTik melalui pesan WhatsApp. Bot ini dibangun menggunakan `whatsapp-web.js`, `axios`, dan terhubung ke API REST MikroTik untuk mengambil dan mengirim data ke router MikroTik.
 
 ## Fitur
 
@@ -17,13 +17,27 @@ MikroTik WhatsApp Bot adalah bot WhatsApp yang terhubung dengan perangkat MikroT
 
 ## Persyaratan
 
-- **Node.js**: v18 atau lebih baru.
+- **Node.js**: v18.
 - **whatsapp-web.js**: Library untuk mengontrol WhatsApp Web.
 - **Axios**: Library untuk melakukan HTTP request ke API MikroTik.
 - **qrcode-terminal**: Library untuk menampilkan QR code di terminal.
 - **MikroTik Router**: Router MikroTik dengan REST API diaktifkan (RouterOS v7.1 atau lebih baru).
 
-## Instalasi
+## Install Dependensi
+```
+curl -s https://deb.nodesource.com/setup_18.x | sudo bash
+```
+```
+sudo apt install nodejs -y
+```
+```
+npm install whatsapp-web.js axios express qrcode-terminal
+```
+```
+sudo apt-get install libnss3 libatk-bridge2.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libpango-1.0-0 libdbus-1-3 libxrandr2 libgbm1 libasound2 libatk1.0-0 libcups2 libxss1 libgtk-3-0
+```
+
+## Instalasi Bot
 
 1. **Clone repository ini:**
 
@@ -36,14 +50,7 @@ MikroTik WhatsApp Bot adalah bot WhatsApp yang terhubung dengan perangkat MikroT
    ```
    cd MikWaBot
    ```
-
-3. **Instal dependensi:**
-
-   ```
-   npm install
-   ```
-
-4. **Jalankan Bot:**
+3. **Jalankan Bot:**
 
    ```
    node bot.js
